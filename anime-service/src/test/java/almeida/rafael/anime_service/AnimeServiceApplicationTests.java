@@ -1,10 +1,10 @@
-package almeida.rafael.anime_project;
+package almeida.rafael.anime_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AnimeProjectApplicationTests {
+class AnimeServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
