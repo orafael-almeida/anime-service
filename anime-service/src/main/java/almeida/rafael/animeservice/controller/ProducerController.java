@@ -3,6 +3,7 @@ package almeida.rafael.animeservice.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import almeida.rafael.animeservice.domain.Producer;
 import almeida.rafael.animeservice.mapper.ProducerMapper;
 import almeida.rafael.animeservice.request.ProducerPostRequest;
@@ -46,7 +49,7 @@ public class ProducerController {
         .filter(producer -> producer.getId().equals(id))
         .findFirst()
         .map(MAPPER::toProducerGetResponse)
-        .orElse(null);
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producer not found"));
 
     return ResponseEntity.ok(producerGetResponse);
   }
@@ -60,5 +63,19 @@ public class ProducerController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
+  }
+
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    log.debug("Request do delete producer by id: {}", id);
+
+    var producerToDelete = Producer.getProducers()
+        .stream()
+        .filter(producer -> producer.getId().equals(id))
+        .findFirst()
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producer not found"));
+    Producer.getProducers().remove(producerToDelete);
+
+    return ResponseEntity.noContent().build();
   }
 }
