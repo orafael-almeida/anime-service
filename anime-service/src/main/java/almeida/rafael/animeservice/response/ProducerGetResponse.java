@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service.response;
+package almeida.rafael.animeservice.response;
 
 import java.time.LocalDateTime;
 

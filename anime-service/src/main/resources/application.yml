@@ -5,6 +5,10 @@ spring:
     virtual:
       enabled: true
 
+logging:
+  level:
+    animeservice: debug
+
 server:
   servlet:
     context-path: /

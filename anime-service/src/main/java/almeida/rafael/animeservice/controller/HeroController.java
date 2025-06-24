@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service.controller;
+package almeida.rafael.animeservice.controller;
 
 import java.util.List;
 

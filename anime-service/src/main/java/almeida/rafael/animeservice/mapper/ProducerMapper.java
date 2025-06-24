@@ -1,12 +1,12 @@
-package almeida.rafael.anime_service.mapper;
+package almeida.rafael.animeservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import almeida.rafael.anime_service.domain.Producer;
-import almeida.rafael.anime_service.request.ProducerPostRequest;
-import almeida.rafael.anime_service.response.ProducerGetResponse;
+import almeida.rafael.animeservice.domain.Producer;
+import almeida.rafael.animeservice.request.ProducerPostRequest;
+import almeida.rafael.animeservice.response.ProducerGetResponse;
 
 @Mapper
 public interface ProducerMapper {

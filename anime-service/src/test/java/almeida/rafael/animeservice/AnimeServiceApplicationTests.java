@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service;
+package almeida.rafael.animeservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

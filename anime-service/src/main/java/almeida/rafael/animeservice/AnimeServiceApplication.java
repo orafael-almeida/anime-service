@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service;
+package almeida.rafael.animeservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

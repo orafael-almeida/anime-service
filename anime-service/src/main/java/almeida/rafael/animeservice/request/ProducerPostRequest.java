@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service.request;
+package almeida.rafael.animeservice.request;
 
 import lombok.Getter;
 import lombok.Setter;

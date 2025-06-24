@@ -1,4 +1,4 @@
-package almeida.rafael.anime_service.domain;
+package almeida.rafael.animeservice.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
