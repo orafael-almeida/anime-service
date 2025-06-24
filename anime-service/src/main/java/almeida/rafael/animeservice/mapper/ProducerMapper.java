@@ -1,5 +1,7 @@
 package almeida.rafael.animeservice.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -17,4 +19,6 @@ public interface ProducerMapper {
   Producer toProducer(ProducerPostRequest postRequest);
 
   ProducerGetResponse toProducerGetResponse(Producer producer);
+
+  List<ProducerGetResponse> toProducerGetResponseList(List<Producer> producers);
 }
