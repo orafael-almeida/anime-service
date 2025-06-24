@@ -1,12 +1,13 @@
 package almeida.rafael.animeservice.repository;
 
 import almeida.rafael.animeservice.domain.Producer;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ProducerHardCodedRepository {
   private static final List<Producer> PRODUCERS = new ArrayList<>();
 

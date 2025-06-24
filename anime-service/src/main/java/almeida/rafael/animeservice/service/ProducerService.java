@@ -3,17 +3,17 @@ package almeida.rafael.animeservice.service;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import almeida.rafael.animeservice.domain.Producer;
 import almeida.rafael.animeservice.repository.ProducerHardCodedRepository;
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
 public class ProducerService {
-  private ProducerHardCodedRepository repository;
-
-  public ProducerService() {
-    this.repository = new ProducerHardCodedRepository();
-  }
+  private final ProducerHardCodedRepository repository;
 
   public List<Producer> findAll(String name) {
     return name == null ? repository.findAll() : repository.findByName(name);

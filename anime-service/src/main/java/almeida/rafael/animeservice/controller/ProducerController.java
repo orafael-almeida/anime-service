@@ -18,18 +18,16 @@ import almeida.rafael.animeservice.request.ProducerPutRequest;
 import almeida.rafael.animeservice.response.ProducerGetResponse;
 import almeida.rafael.animeservice.response.ProducerPostResponse;
 import almeida.rafael.animeservice.service.ProducerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("v1/producers")
+@RequiredArgsConstructor
 @Slf4j
 public class ProducerController {
   private static final ProducerMapper MAPPER = ProducerMapper.INSTANCE;
-  private ProducerService service;
-
-  public ProducerController() {
-    this.service = new ProducerService();
-  }
+  private final ProducerService service;
 
   @GetMapping
   public ResponseEntity<List<ProducerGetResponse>> listAll(@RequestParam(required = false) String name) {
