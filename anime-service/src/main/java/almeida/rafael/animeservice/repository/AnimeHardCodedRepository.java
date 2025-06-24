@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import almeida.rafael.animeservice.domain.Anime;
 
+@Repository
 public class AnimeHardCodedRepository {
   private static final List<Anime> ANIMES = new ArrayList<>();
 

@@ -3,16 +3,16 @@ package almeida.rafael.animeservice.service;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import almeida.rafael.animeservice.domain.Anime;
 import almeida.rafael.animeservice.repository.AnimeHardCodedRepository;
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
 public class AnimeService {
-  private AnimeHardCodedRepository repository;
-
-  public AnimeService() {
-    this.repository = new AnimeHardCodedRepository();
-  }
+  private final AnimeHardCodedRepository repository;
 
   public List<Anime> findAll(String name) {
     return name == null ? repository.findAll() : repository.findByName(name);
