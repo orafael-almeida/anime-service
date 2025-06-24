@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class ProducerController {
-  private static final ProducerMapper MAPPER = ProducerMapper.INSTANCE;
+  private final ProducerMapper mapper;
   private final ProducerService service;
 
   @GetMapping
@@ -34,7 +34,7 @@ public class ProducerController {
     log.debug("Request received to list all animes, param name '{}'", name);
 
     var producers = service.findAll(name);
-    var producerGetResponses = MAPPER.toProducerGetResponseList(producers);
+    var producerGetResponses = mapper.toProducerGetResponseList(producers);
 
     return ResponseEntity.ok(producerGetResponses);
   }
@@ -44,7 +44,7 @@ public class ProducerController {
     log.debug("Request to find producer by id: {}", id);
 
     var producer = service.findByIdOrThrowNotFound(id);
-    var producerGetResponse = MAPPER.toProducerGetResponse(producer);
+    var producerGetResponse = mapper.toProducerGetResponse(producer);
     return ResponseEntity.ok(producerGetResponse);
   }
 
@@ -52,9 +52,9 @@ public class ProducerController {
   public ResponseEntity<ProducerPostResponse> save(@RequestBody ProducerPostRequest producePostRequest) {
     log.debug("Request do save a producer: {}", producePostRequest);
 
-    var producer = MAPPER.toProducer(producePostRequest);
+    var producer = mapper.toProducer(producePostRequest);
     var producerSaved = service.save(producer);
-    var producerGetResponse = MAPPER.tProducerPostResponse(producerSaved);
+    var producerGetResponse = mapper.tProducerPostResponse(producerSaved);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(producerGetResponse);
   }
@@ -72,7 +72,7 @@ public class ProducerController {
   public ResponseEntity<Void> updateProducer(@RequestBody ProducerPutRequest request) {
     log.debug("Request to update producer {}", request);
 
-    var producerToUpdated = MAPPER.toProducer(request);
+    var producerToUpdated = mapper.toProducer(request);
     service.update(producerToUpdated);
 
     return ResponseEntity.noContent().build();
