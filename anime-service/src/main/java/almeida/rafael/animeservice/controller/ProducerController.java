@@ -16,6 +16,7 @@ import almeida.rafael.animeservice.mapper.ProducerMapper;
 import almeida.rafael.animeservice.request.ProducerPostRequest;
 import almeida.rafael.animeservice.request.ProducerPutRequest;
 import almeida.rafael.animeservice.response.ProducerGetResponse;
+import almeida.rafael.animeservice.response.ProducerPostResponse;
 import almeida.rafael.animeservice.service.ProducerService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,12 +51,12 @@ public class ProducerController {
   }
 
   @PostMapping()
-  public ResponseEntity<ProducerGetResponse> save(@RequestBody ProducerPostRequest producePostRequest) {
+  public ResponseEntity<ProducerPostResponse> save(@RequestBody ProducerPostRequest producePostRequest) {
     log.debug("Request do save a producer: {}", producePostRequest);
 
     var producer = MAPPER.toProducer(producePostRequest);
     var producerSaved = service.save(producer);
-    var producerGetResponse = MAPPER.toProducerGetResponse(producerSaved);
+    var producerGetResponse = MAPPER.tProducerPostResponse(producerSaved);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(producerGetResponse);
   }

@@ -8,6 +8,7 @@ import almeida.rafael.animeservice.domain.Producer;
 import almeida.rafael.animeservice.request.ProducerPostRequest;
 import almeida.rafael.animeservice.request.ProducerPutRequest;
 import almeida.rafael.animeservice.response.ProducerGetResponse;
+import almeida.rafael.animeservice.response.ProducerPostResponse;
 
 @Mapper
 public interface ProducerMapper {
@@ -21,5 +22,8 @@ public interface ProducerMapper {
 
   ProducerGetResponse toProducerGetResponse(Producer producer);
 
+  ProducerPostResponse tProducerPostResponse(Producer producer);
+
   List<ProducerGetResponse> toProducerGetResponseList(List<Producer> producers);
+
 }
