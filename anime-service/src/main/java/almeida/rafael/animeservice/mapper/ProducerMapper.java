@@ -1,6 +1,5 @@
 package almeida.rafael.animeservice.mapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,7 +17,7 @@ public interface ProducerMapper {
   @Mapping(target = "id", expression = "java(java.util.concurrent.ThreadLocalRandom.current().nextLong(100_000))")
   Producer toProducer(ProducerPostRequest postRequest);
 
-  Producer toProducer(ProducerPutRequest request, LocalDateTime createdAt);
+  Producer toProducer(ProducerPutRequest request);
 
   ProducerGetResponse toProducerGetResponse(Producer producer);
 
