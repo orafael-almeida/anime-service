@@ -43,7 +43,7 @@ public class ProducerHardCodedRepositoryTest {
   void findAll_ReturnsAllProducers_WhenSuccessfull() {
     BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
     var producers = repository.findAll();
-    Assertions.assertThat(producers).isNotNull().hasSize(producers.size());
+    Assertions.assertThat(producers).isNotNull().hasSameElementsAs(producerList);
 
   }
 
