@@ -1,43 +1,38 @@
 package almeida.rafael.animeservice.repository;
 
 import almeida.rafael.animeservice.domain.Producer;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
+@Log4j2
 public class ProducerHardCodedRepository {
-  private static final List<Producer> PRODUCERS = new ArrayList<>();
-
-  static {
-    var mappa = Producer.builder().id(1L).name("Mappa").createdAt(LocalDateTime.now()).build();
-    var kyoto = Producer.builder().id(2L).name("Kyoto Animation").createdAt(LocalDateTime.now()).build();
-    var madHouse = Producer.builder().id(3L).name("Madhouse").createdAt(LocalDateTime.now()).build();
-    PRODUCERS.addAll(List.of(mappa, kyoto, madHouse));
-  }
+  private final ProducerData producerData;
 
   public List<Producer> findAll() {
-    return PRODUCERS;
+    return producerData.getProducers();
   }
 
   public Optional<Producer> findById(Long id) {
-    return PRODUCERS.stream().filter(producer -> producer.getId().equals(id)).findFirst();
+    return producerData.getProducers().stream().filter(producer -> producer.getId().equals(id)).findFirst();
   }
 
   public List<Producer> findByName(String name) {
-    return PRODUCERS.stream().filter(producer -> producer.getName().equalsIgnoreCase(name))
+    return producerData.getProducers().stream().filter(producer -> producer.getName().equalsIgnoreCase(name))
         .toList();
   }
 
   public Producer save(Producer producer) {
-    PRODUCERS.add(producer);
+    producerData.getProducers().add(producer);
     return producer;
   }
 
   public void delete(Producer producer) {
-    PRODUCERS.remove(producer);
+    producerData.getProducers().remove(producer);
   }
 
   public void update(Producer producer) {
