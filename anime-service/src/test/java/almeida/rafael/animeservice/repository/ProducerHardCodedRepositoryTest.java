@@ -1,7 +1,5 @@
 package almeida.rafael.animeservice.repository;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -16,6 +14,8 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import almeida.rafael.animeservice.commons.ProducerUtils;
 import almeida.rafael.animeservice.domain.Producer;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,13 +27,13 @@ public class ProducerHardCodedRepositoryTest {
   @Mock
   private ProducerData producerData;
   private List<Producer> producerList;
+  @InjectMocks
+  private ProducerUtils producerUtils;
 
   @BeforeEach
   void init() {
-    var ufotable = Producer.builder().id(1L).name("Ufotable").createdAt(LocalDateTime.now()).build();
-    var witStudio = Producer.builder().id(2L).name("Wi Studio").createdAt(LocalDateTime.now()).build();
-    var sudioGhibli = Producer.builder().id(3L).name("Studio Ghibli").createdAt(LocalDateTime.now()).build();
-    producerList = new ArrayList<>(List.of(ufotable, witStudio, sudioGhibli));
+
+    producerList = producerUtils.newProducerList();
   }
 
   @Test
@@ -92,11 +92,7 @@ public class ProducerHardCodedRepositoryTest {
   void save_CreatesProducer_WhenSucessfull() {
     BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
 
-    var producerToSave = Producer.builder()
-        .id(99L)
-        .name("MAPPA")
-        .createdAt(LocalDateTime.now())
-        .build();
+    var producerToSave = producerUtils.newProducerToSave();
 
     var producer = repository.save(producerToSave);
     Assertions.assertThat(producer).isEqualTo(producerToSave).hasNoNullFieldsOrProperties();
