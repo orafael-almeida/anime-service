@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import almeida.rafael.animeservice.domain.Producer;
 import almeida.rafael.animeservice.repository.ProducerData;
 import almeida.rafael.animeservice.repository.ProducerHardCodedRepository;
@@ -135,7 +135,6 @@ public class ProducerControllerTest {
   @Test
   @DisplayName("POST v1/producers creates a producer")
   @Order(6)
-
   void save_CreatesProducer_WhenSucessfull() throws Exception {
     var request = readResourceFile("producer/post-request-producer-200.json");
     var response = readResourceFile("producer/post-response-producer-201.json");
@@ -151,5 +150,69 @@ public class ProducerControllerTest {
         .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andExpect(MockMvcResultMatchers.content().json(response));
+  }
+
+  @Test
+  @DisplayName("PUT v1/producers updates a producer")
+  @Order(7)
+  void update_UpdatesProducer_WhenSucessfull() throws Exception {
+    BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+    var request = readResourceFile("producer/put-request-producer-200.json");
+
+    mockMvc.perform(MockMvcRequestBuilders
+        .put("/v1/producers")
+        .content(request)
+        .contentType(MediaType.APPLICATION_JSON))
+
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+  }
+
+  @Test
+  @DisplayName("PUT v1/producers throws ResponseStatusException when producer is not found")
+  @Order(8)
+
+  void update_ThrowsResponseStatusException_WhenProducerIsNotFound() throws Exception {
+    BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+    var request = readResourceFile("producer/put-request-producer-404.json");
+
+    mockMvc.perform(MockMvcRequestBuilders
+        .put("/v1/producers")
+        .content(request)
+        .contentType(MediaType.APPLICATION_JSON))
+
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(MockMvcResultMatchers.status().reason("Producer not found"));
+
+  }
+
+  @Test
+  @DisplayName("DELETE v1/producers/1 removes a producer by Id")
+  @Order(9)
+  void delete_RemoveProducer_WhenSucessfull() throws Exception {
+    BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+
+    var id = producerList.getFirst().getId();
+    mockMvc.perform(MockMvcRequestBuilders
+        .delete("/v1/producers/{id}", id))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNoContent());
+  }
+
+  @Test
+  @DisplayName("DELETE v1/producers/{id} throws ResponseStatusException when producer is not found")
+  @Order(10)
+  void delete_ThrowsResponseStatusException_WhenProducerIsNotFound() throws Exception {
+    BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+
+    var id = 99L;
+    mockMvc.perform(MockMvcRequestBuilders
+        .delete("/v1/producers/{id}", id))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(MockMvcResultMatchers.status().reason("Producer not found"));
+
   }
 }
