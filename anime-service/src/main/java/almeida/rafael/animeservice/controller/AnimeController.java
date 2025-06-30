@@ -30,7 +30,7 @@ public class AnimeController {
   private final AnimeService service;
 
   @GetMapping
-  public ResponseEntity<List<AnimeGetResponse>> listAll(@RequestParam(required = false) String name) {
+  public ResponseEntity<List<AnimeGetResponse>> findAll(@RequestParam(required = false) String name) {
     log.debug("Request received to list all animes, param name '{}'", name);
 
     var animes = service.findAll(name);
