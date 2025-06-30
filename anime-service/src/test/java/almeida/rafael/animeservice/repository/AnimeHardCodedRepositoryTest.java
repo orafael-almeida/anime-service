@@ -1,6 +1,5 @@
 package almeida.rafael.animeservice.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +13,8 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import almeida.rafael.animeservice.commons.AnimeUtils;
 import almeida.rafael.animeservice.domain.Anime;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,13 +26,13 @@ public class AnimeHardCodedRepositoryTest {
   @Mock
   private AnimeData animeData;
   private List<Anime> animeList;
+  @InjectMocks
+  private AnimeUtils animeUtils;
 
   @BeforeEach
   void init() {
-    var fullMetal = Anime.builder().id(1L).name("Full Metal Alchemist").build();
-    var steinsGate = Anime.builder().id(2L).name("Steins Gate").build();
-    var mashle = Anime.builder().id(3L).name("Mashle").build();
-    animeList = new ArrayList<>(List.of(fullMetal, steinsGate, mashle));
+
+    animeList = animeUtils.newAnimeList();
   }
 
   @Test
@@ -90,10 +91,7 @@ public class AnimeHardCodedRepositoryTest {
   void save_CreatesAnime_WhenSucessfull() {
     BDDMockito.when(animeData.getAnimes()).thenReturn(animeList);
 
-    var animeToSave = Anime.builder()
-        .id(99L)
-        .name("Pokemon")
-        .build();
+    var animeToSave = animeUtils.newAnimeToSave();
 
     var anime = repository.save(animeToSave);
     Assertions.assertThat(anime).isEqualTo(animeToSave).hasNoNullFieldsOrProperties();

@@ -1,6 +1,5 @@
 package almeida.rafael.animeservice.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import almeida.rafael.animeservice.commons.AnimeUtils;
 import almeida.rafael.animeservice.domain.Anime;
 import almeida.rafael.animeservice.repository.AnimeHardCodedRepository;
 
@@ -32,12 +32,13 @@ public class AnimeServiceTest {
   private AnimeHardCodedRepository repository;
   private List<Anime> animesList;
 
+  @InjectMocks
+  private AnimeUtils animeUtils;
+
   @BeforeEach
   void init() {
-    var fullMetal = Anime.builder().id(1L).name("Full Metal Alchemist").build();
-    var steinsGate = Anime.builder().id(2L).name("Steins Gate").build();
-    var mashle = Anime.builder().id(3L).name("Mashle").build();
-    animesList = new ArrayList<>(List.of(fullMetal, steinsGate, mashle));
+
+    animesList = animeUtils.newAnimeList();
   }
 
   @Test
@@ -104,10 +105,7 @@ public class AnimeServiceTest {
   @Order(6)
 
   void save_CreatesAnime_WhenSucessfull() {
-    var animeToSave = Anime.builder()
-        .id(99L)
-        .name("Hellsing")
-        .build();
+    var animeToSave = animeUtils.newAnimeToSave();
     BDDMockito.when(repository.save(animeToSave)).thenReturn(animeToSave);
 
     var savedAnime = service.save(animeToSave);
