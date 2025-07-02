@@ -17,3 +17,8 @@ server:
   tomcat:
     threads:
       max: 20
+
+database:
+  url: ${DB_URL:localhost}:${DB_PORT:3306}
+  username: ${LOCAL_USERNAME:rafael}
+  password: ${LOCAL_PASSWORD:rafael123}
