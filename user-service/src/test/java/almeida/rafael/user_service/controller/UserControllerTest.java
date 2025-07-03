@@ -8,10 +8,12 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -117,5 +119,53 @@ public class UserControllerTest {
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(MockMvcResultMatchers.status().reason("User not found"));
+  }
+
+  @Test
+  @DisplayName("POST v1/users creates a user")
+  @Order(6)
+  void save_CreatesUser_WhenSucessfull() throws Exception {
+    var request = fileUtils.readResourceFile("user/post-request-user-200.json");
+    var response = fileUtils.readResourceFile("user/post-response-user-201.json");
+    var userToSave = userUtils.newUserToSave();
+    BDDMockito.when(repository.save(ArgumentMatchers.any())).thenReturn(userToSave);
+
+    mockMvc.perform(MockMvcRequestBuilders
+        .post(URL)
+        .content(request)
+        .contentType(MediaType.APPLICATION_JSON))
+
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(MockMvcResultMatchers.content().json(response));
+  }
+
+  @Test
+  @DisplayName("DELETE v1/users/1 removes a user by Id")
+  @Order(7)
+  void delete_RemoveUser_WhenSucessfull() throws Exception {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var id = userList.getFirst().getId();
+    mockMvc.perform(MockMvcRequestBuilders
+        .delete(URL + "/{id}", id))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNoContent());
+  }
+
+  @Test
+  @DisplayName("DELETE v1/users/{id} throws ResponseStatusException when user is not found")
+  @Order(8)
+  void delete_ThrowsResponseStatusException_WhenUserIsNotFound() throws Exception {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var id = 99L;
+    mockMvc.perform(MockMvcRequestBuilders
+        .delete(URL + "/{id}", id))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(MockMvcResultMatchers.status().reason("User not found"));
+
   }
 }

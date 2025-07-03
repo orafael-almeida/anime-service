@@ -61,4 +61,57 @@ public class UserHardCodedRepositoryTest {
     Assertions.assertThat(users).isPresent().contains(expectedUser);
 
   }
+
+  @Test
+  @DisplayName("findByFirstName returns an empty list when firsTame is null")
+  @Order(3)
+
+  void findByFirstName_ReturnsEmptyList_WhenNameIsNull() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var users = repository.findByFirstName(null);
+    Assertions.assertThat(users).isNotNull().isEmpty();
+
+  }
+
+  @Test
+  @DisplayName("findByFirstName returns list with found object when name exists")
+  @Order(4)
+
+  void findByFirstName_ReturnsFoundUserInList_WhenNameIsFound() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var expectedUser = userList.getFirst();
+    var users = repository.findByFirstName(expectedUser.getFirstName());
+    Assertions.assertThat(users).contains(expectedUser);
+  }
+
+  @Test
+  @DisplayName("save creates a user")
+  @Order(5)
+
+  void save_CreatesUser_WhenSucessfull() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var userToSave = userUtils.newUserToSave();
+
+    var user = repository.save(userToSave);
+    Assertions.assertThat(user).isEqualTo(userToSave).hasNoNullFieldsOrProperties();
+    var userSavedOptional = repository.findById(userToSave.getId());
+    Assertions.assertThat(userSavedOptional).isPresent().contains(userToSave);
+  }
+
+  @Test
+  @DisplayName("delete removes a user")
+  @Order(6)
+  void delete_RemoveUser_WhenSucessfull() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var userToDelete = userList.getFirst();
+    repository.delete(userToDelete);
+
+    var users = repository.findAll();
+    Assertions.assertThat(users).isNotEmpty().doesNotContain(userToDelete);
+  }
+
 }
