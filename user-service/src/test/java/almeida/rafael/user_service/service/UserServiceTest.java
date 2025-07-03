@@ -2,8 +2,11 @@ package almeida.rafael.user_service.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -15,6 +18,7 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import almeida.rafael.user_service.commons.UserUtils;
 import almeida.rafael.user_service.domain.User;
@@ -66,5 +70,32 @@ public class UserServiceTest {
 
     var users = service.findAll(name);
     assertThat(users).isNotNull().isEmpty();
+  }
+
+  @Test
+  @DisplayName("findById returns a user with given id")
+  @Order(4)
+
+  void findById_ReturnsUser_WhenSuccessfull() {
+    var expectedUser = userList.getFirst();
+    BDDMockito.when(repository.findById(expectedUser.getId())).thenReturn(Optional.of(expectedUser));
+
+    var user = service.findByIdOrThrowNotFound(expectedUser.getId());
+
+    Assertions.assertThat(user).isEqualTo(expectedUser);
+
+  }
+
+  @Test
+  @DisplayName("findById throws ResponseStatusException when user is not found")
+  @Order(5)
+
+  void findById_ThrowsResponseStatusException_WhenProducerNotFound() {
+    var expectedUser = userList.getFirst();
+    BDDMockito.when(repository.findById(expectedUser.getId())).thenReturn(Optional.empty());
+
+    Assertions.assertThatException()
+        .isThrownBy(() -> service.findByIdOrThrowNotFound(expectedUser.getId()))
+        .isInstanceOf(ResponseStatusException.class);
   }
 }

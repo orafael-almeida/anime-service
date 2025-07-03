@@ -3,6 +3,8 @@ package almeida.rafael.user_service.repository;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -43,6 +45,20 @@ public class UserHardCodedRepositoryTest {
     BDDMockito.when(userData.getUsers()).thenReturn(userList);
     var users = repository.findAll();
     assertThat(users).isNotNull().hasSameElementsAs(userList);
+
+  }
+
+  @Test
+  @DisplayName("findById returns an user with given id")
+  @Order(2)
+
+  void findById_ReturnsUser_WhenSuccessfull() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var expectedUser = userList.getFirst();
+    var users = repository.findById(expectedUser.getId());
+
+    Assertions.assertThat(users).isPresent().contains(expectedUser);
 
   }
 }
