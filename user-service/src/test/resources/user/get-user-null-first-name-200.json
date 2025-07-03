@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "firstName": "Toyohisa",
+    "lastName": "Shimasu",
+    "email": "toyohisa@drifters.com"
+  },
+  {
+    "id": 2,
+    "firstName": "Ichigo",
+    "lastName": "Kurosaki",
+    "email": "ichigo@bleach.com"
+  },
+  {
+    "id": 3,
+    "firstName": "Ash",
+    "lastName": "Ketchun",
+    "email": "ash@pokemon.com"
+  }
+]
