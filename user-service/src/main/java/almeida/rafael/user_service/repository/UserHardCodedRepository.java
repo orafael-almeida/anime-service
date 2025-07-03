@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class UserHardCodeRepository {
+public class UserHardCodedRepository {
   private final UserData userData;
 
   public List<User> findAll() {
@@ -21,7 +21,7 @@ public class UserHardCodeRepository {
     return userData.getUsers().stream().filter(user -> user.getId().equals(id)).findFirst();
   }
 
-  public List<User> findByName(String firstName) {
+  public List<User> findByFirstName(String firstName) {
     return userData.getUsers().stream().filter(user -> user.getFirstName().equalsIgnoreCase(firstName))
         .toList();
   }

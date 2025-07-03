@@ -3,8 +3,11 @@ package almeida.rafael.user_service.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import almeida.rafael.user_service.domain.User;
 
+@Component
 public class UserData {
   private final List<User> users = new ArrayList<>(3);
 
