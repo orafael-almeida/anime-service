@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: user-service
+  threads:
+    virtual:
+      enabled: true
+
+logging:
+  level:
+    "[almeida.rafael]": debug
+
+server:
+  port: 8090
+  servlet:
+    context-path: /
+  error:
+    include-stacktrace: on-param
+  tomcat:
+    threads:
+      max: 20
