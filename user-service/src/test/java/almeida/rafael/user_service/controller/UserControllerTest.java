@@ -1,6 +1,8 @@
 package almeida.rafael.user_service.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +11,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,11 +211,12 @@ public class UserControllerTest {
 
   }
 
-  @Test
+  @ParameterizedTest
+  @MethodSource("postUserBadRequestSource")
   @DisplayName("POST v1/users returns bad request when fields are empty")
   @Order(11)
-  void save_ReturnsBadRequest_WhenFieldsAreEmpty() throws Exception {
-    var request = fileUtils.readResourceFile("user/post-request-user-empty-fields-400.json");
+  void save_ReturnsBadRequest_WhenFieldsAreEmpty(String fileName, List<String> errors) throws Exception {
+    var request = fileUtils.readResourceFile("user/%s".formatted(fileName));
 
     var mvcResult = mockMvc.perform(MockMvcRequestBuilders
         .post(URL)
@@ -225,36 +231,21 @@ public class UserControllerTest {
 
     Assertions.assertThat(resolvedException).isNotNull();
 
-    var firstNameError = "The field 'firstName' is required";
-    var lastNameError = "The field 'lastName' is required";
-    var emailError = "The field 'email' is required";
-
-    Assertions.assertThat(resolvedException.getMessage()).contains(firstNameError, lastNameError, emailError);
+    Assertions.assertThat(resolvedException.getMessage()).contains(errors);
   }
 
-  @Test
-  @DisplayName("POST v1/users returns bad request when fields are blank")
-  @Order(12)
-  void save_ReturnsBadRequest_WhenFieldsAreBlank() throws Exception {
-    var request = fileUtils.readResourceFile("user/post-request-user-blank-fields-400.json");
+  private static Stream<Arguments> postUserBadRequestSource() {
+    var firstNameRequiredError = "The field 'firstName' is required";
+    var lastNameRequiredError = "The field 'lastName' is required";
+    var emailRequiredError = "The field 'email' is required";
+    var emailInvalidError = "The e- mail is not valid";
 
-    var mvcResult = mockMvc.perform(MockMvcRequestBuilders
-        .post(URL)
-        .content(request)
-        .contentType(MediaType.APPLICATION_JSON))
+    var allErrors = List.of(firstNameRequiredError, lastNameRequiredError, emailRequiredError);
+    var emailError = Collections.singletonList(emailInvalidError);
 
-        .andDo(MockMvcResultHandlers.print())
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andReturn();
-
-    var resolvedException = mvcResult.getResolvedException();
-
-    Assertions.assertThat(resolvedException).isNotNull();
-
-    var firstNameError = "The field 'firstName' is required";
-    var lastNameError = "The field 'lastName' is required";
-    var emailError = "The field 'email' is required";
-
-    Assertions.assertThat(resolvedException.getMessage()).contains(firstNameError, lastNameError, emailError);
+    return Stream.of(
+        Arguments.of("post-request-user-empty-fields-400.json", allErrors),
+        Arguments.of("post-request-user-blank-fields-400.json", allErrors),
+        Arguments.of("post-request-user-invalid-email-400.json", emailError));
   }
 }
