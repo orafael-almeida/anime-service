@@ -20,6 +20,7 @@ import almeida.rafael.user_service.request.UserPutRequest;
 import almeida.rafael.user_service.response.UserGetResponse;
 import almeida.rafael.user_service.response.UserPostResponse;
 import almeida.rafael.user_service.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +53,7 @@ public class UserController {
   }
 
   @PostMapping()
-  public ResponseEntity<UserPostResponse> save(@RequestBody UserPostRequest request) {
+  public ResponseEntity<UserPostResponse> save(@RequestBody @Valid UserPostRequest request) {
     log.debug("Request to save a user: {}", request);
 
     var user = mapper.toUser(request);
@@ -72,7 +73,7 @@ public class UserController {
   }
 
   @PutMapping
-  public ResponseEntity<Void> updateUser(@RequestBody UserPutRequest request) {
+  public ResponseEntity<Void> updateUser(@RequestBody @Valid UserPutRequest request) {
     log.debug("Request to update user {}", request);
 
     var userToUpdated = mapper.toUser(request);
