@@ -114,4 +114,22 @@ public class UserHardCodedRepositoryTest {
     Assertions.assertThat(users).isNotEmpty().doesNotContain(userToDelete);
   }
 
+  @Test
+  @DisplayName("update updates a user")
+  @Order(7)
+
+  void update_UpdatesUser_WhenSucessfull() {
+    BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
+    var userToUpdate = this.userList.getFirst();
+    userToUpdate.setFirstName("Inuyasha");
+
+    repository.update(userToUpdate);
+
+    Assertions.assertThat(this.userList).contains(userToUpdate);
+    var updatedUserOptional = repository.findById(userToUpdate.getId());
+    Assertions.assertThat(updatedUserOptional).isPresent();
+    Assertions.assertThat(updatedUserOptional.get().getFirstName()).isEqualTo(userToUpdate.getFirstName());
+  }
+
 }
