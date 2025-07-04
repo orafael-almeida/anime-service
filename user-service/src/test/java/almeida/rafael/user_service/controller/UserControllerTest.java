@@ -2,6 +2,7 @@ package almeida.rafael.user_service.controller;
 
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -203,5 +204,57 @@ public class UserControllerTest {
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(MockMvcResultMatchers.status().reason("User not found"));
 
+  }
+
+  @Test
+  @DisplayName("POST v1/users returns bad request when fields are empty")
+  @Order(11)
+  void save_ReturnsBadRequest_WhenFieldsAreEmpty() throws Exception {
+    var request = fileUtils.readResourceFile("user/post-request-user-empty-fields-400.json");
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders
+        .post(URL)
+        .content(request)
+        .contentType(MediaType.APPLICATION_JSON))
+
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andReturn();
+
+    var resolvedException = mvcResult.getResolvedException();
+
+    Assertions.assertThat(resolvedException).isNotNull();
+
+    var firstNameError = "The field 'firstName' is required";
+    var lastNameError = "The field 'lastName' is required";
+    var emailError = "The field 'email' is required";
+
+    Assertions.assertThat(resolvedException.getMessage()).contains(firstNameError, lastNameError, emailError);
+  }
+
+  @Test
+  @DisplayName("POST v1/users returns bad request when fields are blank")
+  @Order(12)
+  void save_ReturnsBadRequest_WhenFieldsAreBlank() throws Exception {
+    var request = fileUtils.readResourceFile("user/post-request-user-blank-fields-400.json");
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders
+        .post(URL)
+        .content(request)
+        .contentType(MediaType.APPLICATION_JSON))
+
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andReturn();
+
+    var resolvedException = mvcResult.getResolvedException();
+
+    Assertions.assertThat(resolvedException).isNotNull();
+
+    var firstNameError = "The field 'firstName' is required";
+    var lastNameError = "The field 'lastName' is required";
+    var emailError = "The field 'email' is required";
+
+    Assertions.assertThat(resolvedException.getMessage()).contains(firstNameError, lastNameError, emailError);
   }
 }
