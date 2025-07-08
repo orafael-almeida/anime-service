@@ -2,10 +2,9 @@ package almeida.rafael.animeservice.service;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import almeida.rafael.animeservice.domain.Anime;
+import almeida.rafael.animeservice.exception.NotFoundException;
 import almeida.rafael.animeservice.repository.AnimeHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,7 @@ public class AnimeService {
 
   public Anime findByIdOrThrowNotFound(Long id) {
     return repository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not found"));
+        .orElseThrow(() -> new NotFoundException("Anime not found"));
   }
 
   public Anime save(Anime anime) {

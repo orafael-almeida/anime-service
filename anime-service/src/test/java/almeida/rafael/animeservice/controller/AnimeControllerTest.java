@@ -112,7 +112,7 @@ public class AnimeControllerTest {
   @DisplayName("GET v1/animes/1 throws anime is not found")
   @Order(5)
 
-  void findById_ThrowsResponseStatusException_WhenAnimeNotFound() throws Exception {
+  void findById_ThrowsNotFound_WhenAnimeNotFound() throws Exception {
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
     var id = 99L;
 
@@ -160,10 +160,10 @@ public class AnimeControllerTest {
   }
 
   @Test
-  @DisplayName("PUT v1/animes throws ResponseStatusException when anime is not found")
+  @DisplayName("PUT v1/animes throws NotFound when anime is not found")
   @Order(8)
 
-  void update_ThrowsResponseStatusException_WhenAnimeIsNotFound() throws Exception {
+  void update_ThrowsNotFound_WhenAnimeIsNotFound() throws Exception {
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
     var request = fileUtils.readResourceFile("anime/put-request-anime-404.json");
 
@@ -192,9 +192,9 @@ public class AnimeControllerTest {
   }
 
   @Test
-  @DisplayName("DELETE v1/animes/{id} throws ResponseStatusException when anime is not found")
+  @DisplayName("DELETE v1/animes/{id} throws NotFound when anime is not found")
   @Order(10)
-  void delete_ThrowsResponseStatusException_WhenAnimeIsNotFound() throws Exception {
+  void delete_ThrowsNotFound_WhenAnimeIsNotFound() throws Exception {
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
 
     var id = 99L;
