@@ -113,13 +113,15 @@ public class AnimeControllerTest {
   @Order(5)
 
   void findById_ThrowsNotFound_WhenAnimeNotFound() throws Exception {
+    var response = fileUtils.readResourceFile("anime/get-anime-by-id-404.json");
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
     var id = 99L;
 
     mockMvc.perform(MockMvcRequestBuilders.get(URL + "/{id}", id))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("Anime not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
+
   }
 
   @Test
@@ -164,6 +166,8 @@ public class AnimeControllerTest {
   @Order(8)
 
   void update_ThrowsNotFound_WhenAnimeIsNotFound() throws Exception {
+    var response = fileUtils.readResourceFile("anime/put-anime-by-id-404.json");
+
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
     var request = fileUtils.readResourceFile("anime/put-request-anime-404.json");
 
@@ -174,7 +178,7 @@ public class AnimeControllerTest {
 
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("Anime not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
 
   }
 
@@ -195,6 +199,7 @@ public class AnimeControllerTest {
   @DisplayName("DELETE v1/animes/{id} throws NotFound when anime is not found")
   @Order(10)
   void delete_ThrowsNotFound_WhenAnimeIsNotFound() throws Exception {
+    var response = fileUtils.readResourceFile("anime/delete-anime-by-id-404.json");
     BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
 
     var id = 99L;
@@ -202,7 +207,7 @@ public class AnimeControllerTest {
         .delete(URL + "/{id}", id))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("Anime not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
 
   }
 }
