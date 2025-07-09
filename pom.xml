@@ -6,10 +6,11 @@
 
 	<groupId>almeida.rafael</groupId>
 	<artifactId>anime-project</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${commons-core.version}</version>
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>commons-core</module>
 		<module>anime-service</module>
 		<module>user-service</module>
 	</modules>

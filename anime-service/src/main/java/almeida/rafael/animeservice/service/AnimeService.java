@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import almeida.rafael.animeservice.domain.Anime;
-import almeida.rafael.animeservice.exception.NotFoundException;
+import almeida.rafael.exception.NotFoundException;
 import almeida.rafael.animeservice.repository.AnimeHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 

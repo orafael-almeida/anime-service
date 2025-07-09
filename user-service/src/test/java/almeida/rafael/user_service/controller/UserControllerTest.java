@@ -118,13 +118,15 @@ public class UserControllerTest {
   @Order(5)
 
   void findById_ThrowsNotFound_WhenUserNotFound() throws Exception {
+    var response = fileUtils.readResourceFile("user/get-user-by-id-404.json");
+
     BDDMockito.when(userData.getUsers()).thenReturn(userList);
     var id = 99L;
 
     mockMvc.perform(MockMvcRequestBuilders.get(URL + "/{id}", id))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("User not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
   }
 
   @Test
@@ -165,13 +167,14 @@ public class UserControllerTest {
   @Order(8)
   void delete_ThrowsNotFound_WhenUserIsNotFound() throws Exception {
     BDDMockito.when(userData.getUsers()).thenReturn(userList);
+    var response = fileUtils.readResourceFile("user/delete-user-by-id-404.json");
 
     var id = 99L;
     mockMvc.perform(MockMvcRequestBuilders
         .delete(URL + "/{id}", id))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("User not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
 
   }
 
@@ -199,6 +202,7 @@ public class UserControllerTest {
   void update_ThrowsNotFound_WhenUserIsNotFound() throws Exception {
     BDDMockito.when(userData.getUsers()).thenReturn(userList);
     var request = fileUtils.readResourceFile("user/put-request-user-404.json");
+    var response = fileUtils.readResourceFile("user/put-user-by-id-404.json");
 
     mockMvc.perform(MockMvcRequestBuilders
         .put(URL)
@@ -207,7 +211,7 @@ public class UserControllerTest {
 
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(MockMvcResultMatchers.status().reason("User not found"));
+        .andExpect(MockMvcResultMatchers.content().json(response));
 
   }
 

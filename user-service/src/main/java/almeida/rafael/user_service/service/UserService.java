@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import almeida.rafael.user_service.domain.User;
-import almeida.rafael.user_service.exception.NotFoundException;
+import almeida.rafael.exception.NotFoundException;
 import almeida.rafael.user_service.repository.UserHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,11 @@ public class UserService {
   }
 
   public void update(User userToUpdate) {
-    var user = findByIdOrThrowNotFound((userToUpdate.getId()));
-    repository.update(user);
+    assertUserExists(userToUpdate.getId());
+    repository.update(userToUpdate);
+  }
+
+  public void assertUserExists(Long id) {
+    findByIdOrThrowNotFound(id);
   }
 }
